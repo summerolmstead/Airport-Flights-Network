@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "ATL", "label": "ATL", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "LAX", "label": "LAX", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "ORD", "label": "ORD", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "DFW", "label": "DFW", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "JFK", "label": "JFK", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "DEN", "label": "DEN", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "SFO", "label": "SFO", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "SEA", "label": "SEA", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "LAS", "label": "LAS", "shape": "dot"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "MCO", "label": "MCO", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"from": "LAS", "to": "LAX", "width": 4.615384615384616}, {"from": "ATL", "to": "DFW", "width": 5.384615384615384}, {"from": "ATL", "to": "ORD", "width": 10.0}, {"from": "DEN", "to": "DFW", "width": 2.564102564102564}, {"from": "DEN", "to": "LAX", "width": 3.58974358974359}, {"from": "DEN", "to": "ORD", "width": 2.051282051282051}, {"from": "DEN", "to": "SEA", "width": 2.8205128205128203}, {"from": "DFW", "to": "JFK", "width": 1.5384615384615385}, {"from": "DFW", "to": "LAS", "width": 1.5384615384615385}, {"from": "DFW", "to": "LAX", "width": 3.076923076923077}, {"from": "DFW", "to": "MCO", "width": 1.5384615384615385}, {"from": "DFW", "to": "ORD", "width": 2.051282051282051}, {"from": "DFW", "to": "SEA", "width": 1.5384615384615385}, {"from": "DFW", "to": "SFO", "width": 2.564102564102564}, {"from": "JFK", "to": "LAS", "width": 4.102564102564102}, {"from": "JFK", "to": "LAX", "width": 4.102564102564102}, {"from": "JFK", "to": "MCO", "width": 2.051282051282051}, {"from": "JFK", "to": "ORD", "width": 2.564102564102564}, {"from": "JFK", "to": "SEA", "width": 2.564102564102564}, {"from": "JFK", "to": "SFO", "width": 3.58974358974359}, {"from": "LAS", "to": "ORD", "width": 2.051282051282051}, {"from": "LAX", "to": "MCO", "width": 3.076923076923077}, {"from": "LAX", "to": "ORD", "width": 3.333333333333333}, {"from": "LAX", "to": "SEA", "width": 2.564102564102564}, {"from": "LAX", "to": "SFO", "width": 3.58974358974359}, {"from": "MCO", "to": "ORD", "width": 2.051282051282051}, {"from": "MCO", "to": "SEA", "width": 1.0256410256410255}, {"from": "ORD", "to": "SEA", "width": 2.051282051282051}, {"from": "ORD", "to": "SFO", "width": 2.564102564102564}, {"from": "SEA", "to": "SFO", "width": 2.8205128205128203}, {"from": "ATL", "to": "DEN", "width": 5.6410256410256405}, {"from": "ATL", "to": "JFK", "width": 4.3589743589743595}, {"from": "ATL", "to": "LAS", "width": 3.58974358974359}, {"from": "ATL", "to": "LAX", "width": 4.871794871794871}, {"from": "ATL", "to": "MCO", "width": 4.102564102564102}, {"from": "ATL", "to": "SEA", "width": 3.076923076923077}, {"from": "ATL", "to": "SFO", "width": 5.128205128205128}, {"from": "LAS", "to": "SEA", "width": 2.051282051282051}, {"from": "DEN", "to": "JFK", "width": 1.0256410256410255}, {"from": "LAS", "to": "MCO", "width": 1.0256410256410255}, {"from": "DEN", "to": "LAS", "width": 2.564102564102564}, {"from": "DEN", "to": "MCO", "width": 2.051282051282051}, {"from": "DEN", "to": "SFO", "width": 1.794871794871795}, {"from": "LAS", "to": "SFO", "width": 2.051282051282051}, {"from": "MCO", "to": "SFO", "width": 1.0256410256410255}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
