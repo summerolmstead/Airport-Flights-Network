@@ -3,4 +3,4 @@ Visualization of source airport to target airport and frequency of flights repre
 
 First, we did a smaller network visualization of just the US major city airports.
 
-Next, we did the full flight network visualization in REAL TIME. Therefore, you can see the graph updating itself every second to measure the new edges and things for every flight occuring in the world. Note: The full_flight.html file because of this takes forever to load. 
+Next, we did the full flight network visualization. Note: The full_flight.html file because of how much data is inside of it makes it take forever to load. 
